@@ -9,6 +9,9 @@ ssl_key='/etc/ssl/certs/certificate.key'
 ssl_cert='/etc/ssl/certs/certificate.crt'
 
 export GNUPGHOME="/home/www-data/.gnupg"
+if [ -e /parameter_store ]; then
+  . /parameter_store    
+fi
 
 gpg_gen_key() {
   key_email="${PASSBOLT_KEY_EMAIL:-passbolt@yourdomain.com}"
@@ -43,7 +46,6 @@ gen_ssl_cert() {
     -subj '/C=FR/ST=Denial/L=Springfield/O=Dis/CN=www.passbolt.local' \
     -keyout $ssl_key -out $ssl_cert
 }
-
 install() {
   tables=$(mysql \
     -u "${DATASOURCES_DEFAULT_USERNAME:-passbolt}" \
